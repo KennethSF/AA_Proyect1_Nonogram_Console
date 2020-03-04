@@ -1,0 +1,11 @@
+C:\Users\Kenneth SF\OneDrive - Estudiantes ITCR\TEC\2020\I Semestre\Análisis de Algoritmos\Proyectos\Proyecto_1\NonogramSolver\NonogramSolver\bin\Debug\netcoreapp2.0\NonogramSolver.deps.json
+C:\Users\Kenneth SF\OneDrive - Estudiantes ITCR\TEC\2020\I Semestre\Análisis de Algoritmos\Proyectos\Proyecto_1\NonogramSolver\NonogramSolver\bin\Debug\netcoreapp2.0\NonogramSolver.runtimeconfig.json
+C:\Users\Kenneth SF\OneDrive - Estudiantes ITCR\TEC\2020\I Semestre\Análisis de Algoritmos\Proyectos\Proyecto_1\NonogramSolver\NonogramSolver\bin\Debug\netcoreapp2.0\NonogramSolver.runtimeconfig.dev.json
+C:\Users\Kenneth SF\OneDrive - Estudiantes ITCR\TEC\2020\I Semestre\Análisis de Algoritmos\Proyectos\Proyecto_1\NonogramSolver\NonogramSolver\bin\Debug\netcoreapp2.0\NonogramSolver.dll
+C:\Users\Kenneth SF\OneDrive - Estudiantes ITCR\TEC\2020\I Semestre\Análisis de Algoritmos\Proyectos\Proyecto_1\NonogramSolver\NonogramSolver\bin\Debug\netcoreapp2.0\NonogramSolver.pdb
+C:\Users\Kenneth SF\OneDrive - Estudiantes ITCR\TEC\2020\I Semestre\Análisis de Algoritmos\Proyectos\Proyecto_1\NonogramSolver\NonogramSolver\obj\Debug\netcoreapp2.0\NonogramSolver.csprojAssemblyReference.cache
+C:\Users\Kenneth SF\OneDrive - Estudiantes ITCR\TEC\2020\I Semestre\Análisis de Algoritmos\Proyectos\Proyecto_1\NonogramSolver\NonogramSolver\obj\Debug\netcoreapp2.0\NonogramSolver.csproj.CoreCompileInputs.cache
+C:\Users\Kenneth SF\OneDrive - Estudiantes ITCR\TEC\2020\I Semestre\Análisis de Algoritmos\Proyectos\Proyecto_1\NonogramSolver\NonogramSolver\obj\Debug\netcoreapp2.0\NonogramSolver.AssemblyInfoInputs.cache
+C:\Users\Kenneth SF\OneDrive - Estudiantes ITCR\TEC\2020\I Semestre\Análisis de Algoritmos\Proyectos\Proyecto_1\NonogramSolver\NonogramSolver\obj\Debug\netcoreapp2.0\NonogramSolver.AssemblyInfo.cs
+C:\Users\Kenneth SF\OneDrive - Estudiantes ITCR\TEC\2020\I Semestre\Análisis de Algoritmos\Proyectos\Proyecto_1\NonogramSolver\NonogramSolver\obj\Debug\netcoreapp2.0\NonogramSolver.dll
+C:\Users\Kenneth SF\OneDrive - Estudiantes ITCR\TEC\2020\I Semestre\Análisis de Algoritmos\Proyectos\Proyecto_1\NonogramSolver\NonogramSolver\obj\Debug\netcoreapp2.0\NonogramSolver.pdb
