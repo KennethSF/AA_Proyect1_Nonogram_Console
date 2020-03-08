@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using static  NonogramSolver.Text;
 using static NonogramSolver.utilities;
+using static NonogramSolver.NonogramFiller;
 
 namespace NonogramSolver
 {
@@ -17,8 +18,9 @@ namespace NonogramSolver
                 @"C:\Users\Kenneth SF\OneDrive - Estudiantes ITCR\TEC\2020\I Semestre\Análisis de Algoritmos\Proyectos\Proyecto_1\data.txt";
             //Reads the file and converts it into two list, one for the rows and the other for the columns
             ReadFile(path, rowList, columnList);
-            int[,] NonogramMatrix = new int[rowList.Count,columnList.Count ];
-            PrintMaxtrix(NonogramMatrix); 
+            var nonogramMatrix = new int[rowList.Count,columnList.Count ];
+            FillFixedFields(nonogramMatrix,rowList,columnList);
+            PrintMaxtrix(nonogramMatrix); 
         }
     }
 }
