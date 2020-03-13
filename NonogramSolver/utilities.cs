@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NonogramSolver
 {
@@ -30,20 +31,32 @@ namespace NonogramSolver
             return auxList;
         }
 
-        public static void PrintMaxtrix(int[,] matrix)
+        public static void Print2DArray<T>(T[,] matrix)
         {
-            var rowLength = matrix.GetLength(0);
-            var colLength = matrix.GetLength(1);
-
-            for (int i = 0; i < rowLength; i++)
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                for (int j = 0; j < colLength; j++)
+                for (int j = 0; j < matrix.GetLength(1); j++)
                 {
-                    Console.Write(string.Format("{0} ", matrix[i, j]));
+                    Console.Write(matrix[i,j] + "\t");
                 }
-                Console.Write(Environment.NewLine + Environment.NewLine);
+                Console.WriteLine();
             }
-            Console.ReadLine();
+        }
+        
+        //This method fill a boolean list with the size of the dimensions of the matrix
+        public static List<bool> SolvedLineList(List<bool> list,int max)
+        {
+            for (var i = 0; i < max; i++)
+            {
+                list.Add(true);
+            }
+            return list;
+        }
+
+        public static bool EmptyList(List<int> list)
+        {
+            if (list == null) throw new ArgumentNullException(nameof(list));
+            return list.All(element => element == 0);
         }
     }
 }
