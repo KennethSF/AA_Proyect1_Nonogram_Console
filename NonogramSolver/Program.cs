@@ -9,7 +9,10 @@ namespace NonogramSolver
     
     class Program
     {
-        static void Main(string[] args)
+        public static int[,] FinalNonogram;
+        public static int[,] AuxNonogram;
+        public static int NumSteps=0;
+        public static void Main(string[] args)
         {
             //Creation of the list that are going to have the ammount of color cells in the column and row
             List<List<int>> rowList = new List<List<int>>();
@@ -19,26 +22,19 @@ namespace NonogramSolver
             List<bool> columnDone= new List<bool>();
             //Path that contains the necessary data to start the game
             const string path =
-                @"C:\Users\Kenneth SF\OneDrive - Estudiantes ITCR\TEC\2020\I Semestre\Análisis de Algoritmos\Proyectos\Proyecto_1\data.txt";
+                @"C:\Users\Kenneth SF\OneDrive - Estudiantes ITCR\TEC\2020\I Semestre\Análisis de Algoritmos\Proyectos\Proyecto_1\7x7_2.txt";
             //Reads the file and converts it into two list, one for the rows and the other for the columns
             ReadFile(path, rowList, columnList);
             var nonogramMatrix = new int[rowList.Count,columnList.Count ];
+            FinalNonogram=new int[rowList.Count,columnList.Count ];
+            AuxNonogram=new int[rowList.Count,columnList.Count ];
             rowDone = SolvedLineList(rowDone,rowList.Count);
             columnDone = SolvedLineList(columnDone, columnList.Count);
-            FillFixedFields(nonogramMatrix,rowList,columnList);
-            //Print2DArray(nonogramMatrix);
+            StartExe(nonogramMatrix,rowList,columnList);
+            
             Console.WriteLine();
-            if (IsDone(nonogramMatrix, 1, 1, columnList[1]) == false)
-            {
-                Console.Write("No está lleno");
-                Console.WriteLine();
-            }
-            else
-            {
-                Console.Write("Está lleno");
-                Console.WriteLine();
-            }
-            Print2DArray(nonogramMatrix);
+            CleanMatrix(FinalNonogram);
+            
         }
     }
 }
