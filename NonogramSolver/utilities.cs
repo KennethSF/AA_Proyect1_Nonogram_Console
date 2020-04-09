@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using static NonogramSolver.NonogramFiller;
+using static NonogramSolver.Program;
 
 namespace NonogramSolver
 {
@@ -89,7 +91,7 @@ namespace NonogramSolver
             return clone;
         }
 
-        public static int[,] CreateAuxMatrix(int[,] matrix,List<int> positions)
+        public static int[,] CreateAuxMatrix(int[,] matrix,List<int> positions,int line)
         {
             var clone = new int[matrix.GetLength(0), matrix.GetLength(1)];
             for (var i = 0; i < matrix.GetLength(0); i++) {
@@ -97,7 +99,14 @@ namespace NonogramSolver
                     clone[i, j] = matrix[i,j];
                 }
             }
-            clone[positions[0],positions[1]] = 1;
+
+            if (positions != null)
+            {
+                foreach (var i in positions) {
+                    clone[line,i] = 1;
+                }    
+            }
+            
             return clone;
         }
         
@@ -113,22 +122,54 @@ namespace NonogramSolver
             }
         }
 
-        public static List<List<int>> ZeroCells(int[,] matrix)
+        public static void InitializeArrayOfList(List<int>[] array)
         {
-            var zeroCells = new List<List<int>>();
-            for (var i = 0; i < matrix.GetLength(0); i++)
-            {
-                for (var j = 0; j < matrix.GetLength(1); j++)
-                {
+            for (int i = 0; i < array.Length; i++) {
+                array[i]= new List<int>();
+            }
+        }
+        
+        public static void InitializeCombinationList(List<List<int>>[] array)
+        {
+            for (int i = 0; i < array.Length; i++) {
+                array[i]= new List<List<int>>();
+            }
+        }
+        public static List<int>[] ZeroCells(int[,] matrix, List<int>[] remainingPositions)
+        {
+            for (var i = 0; i < matrix.GetLength(0); i++) {
+                for (var j = 0; j < matrix.GetLength(1); j++) {
                     if (matrix[i, j] == 0)
-                    {
-                        var aux = new List<int>() {i, j};
-                        zeroCells.Add(aux);
-                    }
+                        remainingPositions[i].Add(j);
                 }
             }
+            return remainingPositions;
+        }
 
-            return zeroCells;
+        public static void PrintArray(int[] array)
+        {
+            foreach(var item in array) {
+                Console.Write(item.ToString()+" ");
+            }
+            Console.WriteLine();
+        }
+        
+        public static void RemainingAmount(int[,] matrix, int[] array, List<List<int>> rowList)
+        {
+            for (var i = 0; i < array.Length; i++) {
+                array[i] = rowList[i].Sum() - TotalPainted(matrix, array, i);
+            }
+        }
+
+        public static int TotalPainted(int[,] matrix, int[] array,int line)
+        {
+            var cont = 0;
+            for (int i = 0; i < matrix.GetLength(0); i++) {
+                if (matrix[line, i] == 1)
+                    cont++;
+            }
+
+            return cont;
         }
 
         public static void PrintListOfList(IEnumerable<List<int>> list)
@@ -146,47 +187,8 @@ namespace NonogramSolver
 
         // Function to generate all binary strings 
         // Function to print the output 
-        static void InsertCombination(int[] arr, int n)
-        {
-            string aux = "";
-            for (int i = 0; i < n; i++)
-            {
-                aux += arr[i];
-            } 
-            //Console.WriteLine(aux.Length);
-            BinaryCombinations.Add(aux);
-        }
-
-        private static void WriteToConsole(List<int> items)
-        {
-            foreach (var o in items)
-            {
-                Console.WriteLine(o);
-            }
-            Console.WriteLine("-----------------");
-        }
-    // Function to generate all binary strings 
-        public static void generateAllBinaryStrings(int n, int[] arr, int i)
-        {
-            if (i == n)  
-            { 
-                InsertCombination(arr, n); 
-                return; 
-            } 
-  
-            // First assign "0" at ith position 
-            // and try for all other permutations 
-            // for remaining positions 
-            arr[i] = 0; 
-            generateAllBinaryStrings(n, arr, i + 1); 
-  
-            // And then assign "1" at ith position 
-            // and try for all other permutations 
-            // for remaining positions 
-            arr[i] = 1; 
-            generateAllBinaryStrings(n, arr, i + 1); 
-            
-        }
+        
+    
 
         public static void printArrays(List<string> data)
         {
@@ -199,11 +201,11 @@ namespace NonogramSolver
                 }
             }
         }
-        public static int[,] TryMatrixOption(int[,] matrix,List<int>[] positions)
+        public static int[,] TryMatrixOption(int[,] matrix,List<int> positions,int line)
         {
             var auxMatrix = matrix;
-            foreach (List<int> element in positions) {
-                auxMatrix[element[0], element[1]] = 1;
+            foreach (var element in positions) {
+                auxMatrix[line,element] = 1;
             }            
             return auxMatrix;
         }
@@ -234,47 +236,132 @@ namespace NonogramSolver
             return remainingCells;
         }
 
-        public static void PrintRow(int[,] matrix,int line)
-        {
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                Console.Write(matrix[line,i]+" ");
-            }
-            Console.WriteLine();
-        }
         
-        public static bool AllVisited(int[,] matrix)
-        {
-            for (var i = 0; i < matrix.GetLength(0); i++)
-            {
-                for (var j = 0; j < matrix.GetLength(1); j++) {
-                    if (matrix[i, j] == 0)
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
 
         public static void PrintArrayOfList(List<int>[] array)
         {
             for (int i = 0; i < array.Length; i++)
             {
-                foreach (int element in array[i]) {
-                    Console.Write(element);
+                string aux = "";
+                if (array[i] != null) {
+                    foreach (int element in array[i])
+                    {
+                        aux += element+" ";
+                    }
+                    Console.WriteLine(aux);
                 }
-                Console.WriteLine();
+                else
+                    break;
             }
         }
 
-        public static bool NotOnTheList(List<int>[] array, List<int> option)
+
+
+        public static void BlockLine(int[,] matrix,int dimension, int line)
         {
-            foreach (var t in array) {
-                if (t == option)
-                    return false;
+            for (int i = 0; i < matrix.GetLength(dimension); i++) {
+                if (dimension == 0) {
+                    if (matrix[line, i] == 0)
+                        matrix[line, 0] = 3;
+                }
+                else {
+                    if (matrix[i, line] == 0)
+                        matrix[i, line] = 3;
+                }
             }
-            return true;
+        }
+        
+        public static void UnlockLine(int[,] matrix,int dimension, int line)
+        {
+            for (int i = 0; i < matrix.GetLength(dimension); i++) {
+                if (dimension == 0) {
+                    if (matrix[line, i] == 3)
+                        matrix[line, 0] = 0;
+                }
+                else {
+                    if (matrix[i, line] == 0)
+                        matrix[i, line] = 0;
+                }
+            }
+        }
+
+        public static bool NotBlocked(int[,] matrix, int x, int y)
+        {
+            return matrix[x, y] == 0;
+        }
+        
+        static void combinationUtil(List<int>arr,List<List<int>>[]combinationList, int []data,  
+            int start, int end,  
+            int index, int r,int pos,List<int> auxList,int[,]matrix) 
+        { 
+            List<int> auxList2=new List<int>();  
+            // Current combination is  
+            // ready to be printed,  
+            // print it 
+            if (index == r)
+            {
+                for (int j = 0; j < r; j++)
+                    auxList2.Add(data[j]);
+                int[,] auxMatrix = CreateAuxMatrix(matrix, auxList2, pos);
+                if (LineDone(auxMatrix, 0, pos, rowList[pos]))
+                    combinationList[pos].Add(auxList2);
+                return; 
+            } 
+  
+            // replace index with all 
+            // possible elements. The  
+            // condition "end-i+1 >=  
+            // r-index" makes sure that  
+            // including one element 
+            // at index will make a  
+            // combination with remaining  
+            // elements at remaining positions 
+            for (int i = start; i <= end &&  
+                                end - i + 1 >= r - index; i++) 
+            { 
+                data[index] = arr[i]; 
+                combinationUtil(arr,combinationList, data, i + 1,  
+                    end, index + 1, r,pos,auxList,matrix); 
+            } 
+        } 
+  
+        // The main function that prints 
+        // all combinations of size r 
+        // in arr[] of size n. This  
+        // function mainly uses combinationUtil() 
+        private static void CreateCombination(List<int>arr,List<List<int>>[] combinationList,  
+            int n, int r,int pos,List<int> auxList,int[,] matrix) 
+        {  
+            // A temporary array to store  
+            // all combination one by one 
+            int []data = new int[r]; 
+            
+            // Print all combination  
+            // using temprary array 'data[]' 
+            combinationUtil(arr,combinationList, data, 0, 
+                n - 1, 0, r,pos,auxList,matrix); 
+        }
+
+        public static void CreateCombinations(List<int>[] zeroCells,int[] remainingAmount,List<List<int>>[]combinationList,int[,] matrix) {
+            for (int i = 0; i < zeroCells.Length; i++) {
+                if (zeroCells[i] != null) {
+                    List<int> auxList=new List<int>();
+                    CreateCombination(zeroCells[i],combinationList, zeroCells[i].Count, remainingAmount[i],i,auxList,matrix);
+                    
+                }
+                else
+                {
+                    Console.WriteLine("Es null");
+                    combinationList[i]=null;
+                }
+            }
+        }
+
+        public static void CleanCombination(int[,] matrix, List<int> combinationList, int row)
+        {
+            foreach (var val in combinationList) {
+                matrix[row, val]=0;
+            }
         }
     }
 }
