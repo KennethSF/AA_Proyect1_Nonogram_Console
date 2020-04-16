@@ -11,8 +11,7 @@ namespace NonogramSolver
 {
     public class NonogramFiller
     {
-
-        public static void UnreachableCells(int[,] matrix, List<List<int>> rowList)
+        private static void UnreachableCells(int[,] matrix, List<List<int>> rowList)
         {
             for (var i = 0; i < matrix.GetLength(1); i++)
             {
@@ -29,54 +28,48 @@ namespace NonogramSolver
             }
         }
 
-        public static int First1Left(int[,] matrix, int line)
+        private static int First1Left(int[,] matrix, int line)
         {
-            for (var i = 0; i < matrix.GetLength(1); i++)
-            {
-                if (matrix[line, i] == 1)
-                    return i;
-            }
-
-            return -1;
-        }
-        public static int First1Right(int[,] matrix, int line)
-        {
-            for (var i = matrix.GetLength(1)-1; i >=0; i--)
-            {
+            for (var i = 0; i < matrix.GetLength(1); i++) {
                 if (matrix[line, i] == 1)
                     return i;
             }
             return -1;
         }
 
-        public static int[,] UnreachableCells(int[,] matrix, int line, int limitLeft,int limitRight)
+        private static int First1Right(int[,] matrix, int line)
         {
-            while (limitLeft >= 0)
-            {
+            for (var i = matrix.GetLength(1)-1; i >=0; i--) {
+                if (matrix[line, i] == 1)
+                    return i;
+            }
+            return -1;
+        }
+
+        private static int[,] UnreachableCells(int[,] matrix, int line, int limitLeft,int limitRight)
+        {
+            while (limitLeft >= 0) {
                 matrix[line, limitLeft] = 2;
                 limitLeft--;
             }
-
-            while (limitRight<matrix.GetLength(1))
-            {
+            while (limitRight<matrix.GetLength(1)) {
                 matrix[line, limitRight] = 2;
                 limitRight++;
             }
             return matrix;
         }
-        public static int HasA1(int[,] matrix, int line)
+
+        private static int HasA1(int[,] matrix, int line)
         {
             var cont = 0;
-            for (var i = 0; i < matrix.GetLength(1); i++)
-            {
+            for (var i = 0; i < matrix.GetLength(1); i++) {
                 if (matrix[line, i] == 1)
                     cont++;
             }
             return cont;
         }
-        
-        public static void FillFixedFields(int[,] matrix, List<List<int>> rowList, List<List<int>> columnList)
-        {
+
+        private static void FillFixedFields(int[,] matrix, List<List<int>> rowList, List<List<int>> columnList) {
             //0 For rows
             //1 for columns
             FillLine(matrix, rowList, 0);
@@ -85,41 +78,32 @@ namespace NonogramSolver
         }
 
         //This method fill the cells that always will be colored according to the clues
-        public static void FillLine(int[,] matrix, List<List<int>> list, int dimension)
-        {
-            int i = 0;
-            int aux = 0;
-            foreach (List<int> actual in list)
-            {
-                if (actual.Count == 1)
-                {
+        private static void FillLine(int[,] matrix, List<List<int>> list, int dimension) {
+            var i = 0;
+            foreach (List<int> actual in list) {
+                if (actual.Count == 1) {
                     if (actual[0] == matrix.GetLength(dimension))
                         matrix = PaintAll(matrix, dimension, i);
                     if (actual[0] >= matrix.GetLength(dimension) / 2 + 1)
                         matrix = PaintMin(matrix, actual[0], dimension, i);
-                    aux++;
                 }
                 i++;
             }
-            matrix=CheckEmptyCells(matrix,dimension,list);
+            CheckEmptyCells(matrix,dimension,list);
             
         }
 
-        private static int[,] PaintAll(int[,] matrix, int dimension, int position)
-        {
-            for (var i = 0; i < matrix.GetLength(dimension); i++)
-            {
+        private static int[,] PaintAll(int[,] matrix, int dimension, int position) {
+            for (var i = 0; i < matrix.GetLength(dimension); i++) {
                 if (dimension == 0)
                     matrix[position, i] = 1;
                 else
                     matrix[i, position] = 1;
             }
-
             return matrix;
         }
 
-        private static int[,] PaintMin(int[,] matrix, int fill, int dimension, int position)
-        {
+        private static int[,] PaintMin(int[,] matrix, int fill, int dimension, int position) {
             var residue = matrix.GetLength(dimension) - fill;
             var color = fill - residue; //Controls how many cells are left to color
             var min = matrix.GetLength(dimension) / 2;
@@ -128,26 +112,20 @@ namespace NonogramSolver
             var next = min + 1;
 
             //Color the center of the array
-            if (dimension == 0)
-            {
+            if (dimension == 0) {
                 //Console.WriteLine("Position: {0} Min: {1}",position,min);
                 matrix[position, min] = 1;
                 //In case the array is pair
-                if (matrix.GetLength(dimension) % 2 == 0)
-                {
-                    
+                if (matrix.GetLength(dimension) % 2 == 0) {
                     matrix[position, min-1] = 1;
                     color -= 1;
                     previous -= 1;
                 }
             }
-            else
-            {
+            else {
                 matrix[min, position] = 1;
                 //In case the array is pair
-                if (matrix.GetLength(dimension) % 2 == 0)
-                {
-                    
+                if (matrix.GetLength(dimension) % 2 == 0) {
                     matrix[min -1, position] = 1;
                     color -= 1;
                 }
@@ -168,8 +146,7 @@ namespace NonogramSolver
             return matrix;
         }
 
-        private static int[,] PaintRow(int[,] matrix, int previous, int next, int position)
-        {
+        private static int[,] PaintRow(int[,] matrix, int previous, int next, int position) {
             if(matrix[position, previous] == 0)
                 matrix[position, previous] = 1;
             if(matrix[position, next] == 0)
@@ -177,8 +154,7 @@ namespace NonogramSolver
             return matrix;
         }
         
-        private static int[,] PaintColumn(int[,] matrix, int previous, int next, int position)
-        {
+        private static int[,] PaintColumn(int[,] matrix, int previous, int next, int position) {
             if(matrix[previous, position] == 0)
                 matrix[previous, position] = 1;
             if(matrix[next, position] ==0)
@@ -189,10 +165,8 @@ namespace NonogramSolver
         private static int[,] CheckEmptyCells(int[,] matrix, int dimension,List<List<int>>list) //This function checks if a line filled all the spaces and mark the
         {                                                    //cells that never will be filled
             var i = 0;
-            foreach (List<int> actual in list)
-            {
-                if (actual.Count == 1)
-                {
+            foreach (var actual in list) {
+                if (actual.Count == 1) {
                     if (actual[0] == NumberOfCells(matrix, dimension, i))
                         matrix=FillEmptyCells(matrix, dimension, i);    
                 }
@@ -200,19 +174,16 @@ namespace NonogramSolver
             }
             return matrix;
         }
-        private static int NumberOfCells (int[,] matrix, int dimension, int line)
-        {
+        private static int NumberOfCells (int[,] matrix, int dimension, int line) {
             var aux = 0;
             var length = matrix.GetLength(dimension);
             for (var i = 0; i < length; i++)
             {
-                if (dimension == 0)//Counts how many cells have been filled
-                {
+                if (dimension == 0) {//Counts how many cells have been filled
                     if (matrix[line, i] == 1)
                         aux += 1;
                 }
-                else
-                {
+                else {
                     if (matrix[i, line] == 1)
                         aux += 1;        
                 }
@@ -242,7 +213,7 @@ namespace NonogramSolver
             return matrix;
         }
 
-        public static void FullSeparatedClues(int[,] matrix,List<List<int>>list,int dimension)
+        private static void FullSeparatedClues(int[,] matrix,List<List<int>>list,int dimension)
         {
             var dimensionLenght = matrix.GetLength(dimension);
             
@@ -254,7 +225,7 @@ namespace NonogramSolver
             }
         }
 
-        public static int[,] FullSeparatedCluesAux(int[,] matrix, List<int> list,int dimension,int line)
+        private static int[,] FullSeparatedCluesAux(int[,] matrix, List<int> list,int dimension,int line)
         {
             var pos = 0;
             var auxList = list;
@@ -265,20 +236,14 @@ namespace NonogramSolver
                     matrix[i, line] = 1;
                 }
                 auxList[pos]--;
-                if (auxList[pos]==0)
-                {
-                    pos++;
-                    i++;
-                    if (i < matrix.GetLength(dimension))
-                    {
-                        if (dimension == 0) {
-                            matrix[line, i] = 2;
-                        }else {
-                            matrix[i, line] = 2;
-                        }    
-                    }
-                    
-                    
+                if (auxList[pos] != 0) continue;
+                pos++;
+                i++;
+                if (i >= matrix.GetLength(dimension)) continue;
+                if (dimension == 0) {
+                    matrix[line, i] = 2;
+                }else {
+                    matrix[i, line] = 2;
                 }
 
             }
@@ -354,22 +319,9 @@ namespace NonogramSolver
             }
             return EmptyList(CloneList);
         }
-
-        public static bool ValidLine(int[,] matrix, List<List<int>> cluesY)
-        {
-            
-            for (var i = 0; i < matrix.GetLength(0); i++) {
-                //var coordinate = combinationList[index];
-                if (!ValidOption(matrix,cluesY[i],i))
-                    return false;
-            }
-            return true;
-        }
         
-        public static bool ValidOption(int[,] matrix,List<int> cluesY,int x)
-        {
+        public static bool ValidOption(int[,] matrix,List<int> cluesY,int x) {
             var cloneList=new List<int>(cluesY);
-            
             var cont = 0;
             for (var i = 0; i < matrix.GetLength(1); i++) {
                 if (matrix[x, i] != 1) continue;
@@ -384,63 +336,45 @@ namespace NonogramSolver
             for (var i = 0; i < matrix.GetLength(0); i++) {
                 List<int> aux=new List<int>(rowList[i]);
                 if (LineDone(CloneMatrix(matrix), 0, i, rowList[i])==false)
-                {
-                    //Console.WriteLine("Fila {0} no está completa",i);
                     return false;
-                }
-                    
             }
-            for (var i = 0; i < matrix.GetLength(1); i++)
-            {
-                List<int> aux=new List<int>(columnList[i]);
-                //aux.ForEach(Console.WriteLine);
-                if (LineDone(matrix, 1, i, aux)==false)
-                {
-                    //Console.WriteLine("Columnas no están completas");
+            for (var i = 0; i < matrix.GetLength(1); i++) {
+                var aux=new List<int>(columnList[i]);
+
+                if (LineDone(matrix, 1, i, aux) == false)
                     return false;
-                }
-                    
             }
             return true;
         }
         
         
         //Method that checks and blocks a line in case is solved
-        public static void CheckLines(int[,] matrix,List<int> positions,List<int> columnList) {
-            foreach (var VARIABLE in positions)
-            {
-                if (LineDone(matrix,1,VARIABLE,columnList)) {
-                    BlockLine(matrix,1,VARIABLE);
-                }
+        private static void CheckLines(int[,] matrix,List<int> positions,List<int> columnList) {
+            foreach (var variable in positions.Where(variable => LineDone(matrix,1,variable,columnList))) {
+                BlockLine(matrix,1,variable);
             }
         }
-        
-        public static bool ValidCombination(int[,] matrix,int row,List<int> positions)
-        {
-            return positions.All(VARIABLE => matrix[row, VARIABLE] == 0);
+
+        private static bool ValidCombination(int[,] matrix,int row,List<int> positions) {
+            return positions.All(variable => matrix[row, variable] == 0);
         }
 
-        public static void CheckFullLines(int[,] matrix, List<List<int>> rowList, List<List<int>> columnList)
-        {
+        private static void CheckFullLines(int[,] matrix, List<List<int>> rowList, List<List<int>> columnList){
             for (var i = 0; i < rowList.Count; i++) {
                 var total = rowList[i].Sum();
-                if (total == CheckFullLinesAux(matrix,i, 0)) {
+                if (total == CheckFullLinesAux(matrix,i, 0)) 
                     FillFinishedLine(matrix, i, 0);
-                }
             }
             for (var i = 0; i < columnList.Count; i++) {
                 var total = columnList[i].Sum();
-                if (total == CheckFullLinesAux(matrix,i, 1)) {
+                if (total == CheckFullLinesAux(matrix,i, 1)) 
                     FillFinishedLine(matrix, i, 1);
-                }
             }
         }
 
-        public static int CheckFullLinesAux(int[,] matrix,int line, int dimension)
-        {
-            int cont = 0;
-            for (int i = 0; i < matrix.GetLength(dimension); i++)
-            {
+        private static int CheckFullLinesAux(int[,] matrix,int line, int dimension) {
+            var cont = 0;
+            for (var i = 0; i < matrix.GetLength(dimension); i++) {
                 if (dimension==0) {
                     if (matrix[line, i] == 1)
                         cont++;
@@ -449,189 +383,143 @@ namespace NonogramSolver
                         cont++;
                 }
             }
-
             return cont;
         }
 
-        public static int[,] FillFinishedLine(int[,] matrix,int line,int dimension)
-        {
-            for (int i = 0; i < matrix.GetLength(dimension); i++)
-            {
-                if (dimension==0)
-                {
+        private static int[,] FillFinishedLine(int[,] matrix,int line,int dimension) {
+            for (var i = 0; i < matrix.GetLength(dimension); i++) {
+                if (dimension==0) {
                     if (matrix[line, i] != 1)
                         matrix[line, i] = 2;
-                }else
-                {
+                }else {
                     if (matrix[i, line] != 1)
                         matrix[i, line] = 2;
                 }
             }
             return matrix;
         }
-        
 
-        public static void ClueBiggerThanSpace(int[,] matrix , List<List<int>> rowList, List<List<int>> columnList)
-        {
 
-            int contL;
-            int contR;
-            int contU;
-            int contD;
-            bool flagL;
-            bool flagR;
-            bool flagU;
-            bool flagD;
-            int posR;
-            int posD;
-            //Console.WriteLine("Linea: {0}",j);
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                if (rowList[i].Count == 1)
-                {
-                    contL = 0;
-                    contR = 0;
-                    flagL = true;
-                    flagR = true;
-                    posR = matrix.GetLength(0)-1;
-                    for (var k = 0; k < matrix.GetLength(1); k++) {
-                        if (matrix[i, k] != 2 && flagL) 
-                            contL++;
-                        else
-                            flagL = false;
-                        if (matrix[i,posR]!=2 && flagR)
-                            contR++;
-                        else 
-                            flagR=false;
-                        posR--;
-                    }
-                    if (contL < rowList[i].Sum())
-                        matrix=BlockLeftUp(matrix, i, 0, 0);
-                    if(contR<rowList[i].Sum())
-                        matrix=BlockRightDown(matrix, i, matrix.GetLength(0)-1, 0);
-                }
-            }
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                if (columnList[i].Count == 1)
-                {
-                    contU = 0;
-                    contD = 0;
-                    flagU = true;
-                    flagD = true;
-                    posD = matrix.GetLength(1)-1;
-                    for (var k = 0; k < matrix.GetLength(1); k++) {
-                        if (matrix[k, i] != 2 && flagU) 
-                            contU++;
-                        else
-                            flagU = false;
-                        if (matrix[posD,i]!=2 && flagD)
-                            contD++;
-                        else 
-                            flagD=false;
-                        posD--;
-                    }
-                    if (contU < columnList[i].Sum())
-                        matrix=BlockLeftUp(matrix, i, 0,1);
-                    if(contD<columnList[i].Sum())
-                        matrix=BlockRightDown(matrix, i, matrix.GetLength(1)-1, 1);
-                }
-            }
-
-        }
-
-        public static int[,] BlockLeftUp(int[,] matrix, int line, int pos,int dimension)
-        {
-            for (int i = 0; i < matrix.GetLength(dimension); i++)
-            {
-                if (dimension==0)
-                {
-                    if (matrix[line, i] != 2)
-                    {
-                        matrix[line, i] = 2;
-                    }
-                    else
-                        break;
-                }
-                else
-                {
-                    if (matrix[i, line] != 2)
-                    {
-                        matrix[i, line] = 2;
-                    }
-                    else
-                        break;
-                }
-            }
-
-            return matrix;
-        }
-        
-        public static int[,] BlockRightDown(int[,] matrix, int line, int pos,int dimension)
+        private static void ClueBiggerThanSpace(int[,] matrix , List<List<int>> rowList, List<List<int>> columnList)
         {
             
-            for (int i = 0; i < matrix.GetLength(dimension); i++)
+            //Console.WriteLine("Linea: {0}",j);
+            for (var i = 0; i < matrix.GetLength(0); i++)
             {
-                if (dimension==0)
-                {
-                    if (matrix[line,pos] != 2)
-                    {
-                        matrix[line,pos] = 2;
-                    }
+                if (rowList[i].Count != 1) continue;
+                var contL = 0;
+                    
+                bool flagL;
+                bool flagR;
+
+                var contR = 0;
+                flagL = true;
+                flagR = true;
+                var posR = matrix.GetLength(0)-1;
+                for (var k = 0; k < matrix.GetLength(1); k++) {
+                    if (matrix[i, k] != 2 && flagL) 
+                        contL++;
+                    else
+                        flagL = false;
+                    if (matrix[i,posR]!=2 && flagR)
+                        contR++;
+                    else 
+                        flagR=false;
+                    posR--;
+                }
+                if (contL < rowList[i].Sum())
+                    matrix=BlockLeftUp(matrix, i, 0);
+                if(contR<rowList[i].Sum())
+                    matrix=BlockRightDown(matrix, i, matrix.GetLength(0)-1, 0);
+            }
+            for (var i = 0; i < matrix.GetLength(0); i++)
+            {
+                if (columnList[i].Count != 1) continue;
+                var contU = 0;
+                var contD = 0;
+                var flagU = true;
+                var flagD = true;
+                var posD = matrix.GetLength(1)-1;
+                for (var k = 0; k < matrix.GetLength(1); k++) {
+                    if (matrix[k, i] != 2 && flagU) 
+                        contU++;
+                    else
+                        flagU = false;
+                    if (matrix[posD,i]!=2 && flagD)
+                        contD++;
+                    else 
+                        flagD=false;
+                    posD--;
+                }
+                if (contU < columnList[i].Sum())
+                    matrix=BlockLeftUp(matrix, i,1);
+                if(contD<columnList[i].Sum())
+                    matrix=BlockRightDown(matrix, i, matrix.GetLength(1)-1, 1);
+            }
+
+        }
+
+        private static int[,] BlockLeftUp(int[,] matrix, int line,int dimension)
+        {
+            for (var i = 0; i < matrix.GetLength(dimension); i++) {
+                if (dimension==0) {
+                    if (matrix[line, i] != 2)
+                        matrix[line, i] = 2;
                     else
                         break;
                 }
                 else
                 {
+                    if (matrix[i, line] != 2) 
+                        matrix[i, line] = 2;
+                    else
+                        break;
+                }
+            }
+            return matrix;
+        }
+
+        private static int[,] BlockRightDown(int[,] matrix, int line, int pos,int dimension) {
+            
+            for (var i = 0; i < matrix.GetLength(dimension); i++) {
+                if (dimension==0) {
+                    if (matrix[line,pos] != 2) 
+                        matrix[line,pos] = 2;
+                    else
+                        break;
+                }else {
                     if (matrix[pos, line] != 2)
-                    {
                         matrix[pos, line] = 2;
-                    }
                     else
                         break;
                 }
                 pos--;
             }
-
             return matrix;
         }
-        
 
-        public static void Backtracking(int row,int[,] matrix,List<List<int>>[] combinationList
+
+        private static void Backtracking(int row,int[,] matrix,List<List<int>>[] combinationList
             ,List<List<int>> rowList, List<List<int>> columnList) {
             if (row > combinationList.Length-1) //Doesn't have solution
-            {
                 return;
-            }
-
             if (combinationList[row] == null)//Go to the next row if the current one is empty
-            {
                 Backtracking(row+1,matrix,combinationList,rowList,columnList);
-            }
-            for (int i = 0; i < combinationList[row].Count; i++)
-            {
+            
+            for (var i = 0; i < combinationList[row].Count; i++) {
                 
-                if (ValidCombination(matrix, row, combinationList[row][i]) &&(Solved==false))
-                {
-                    int[,] auxMatrix = CreateAuxMatrix(matrix, combinationList[row][i], row);
-
+                if (ValidCombination(matrix, row, combinationList[row][i]) &&(Solved==false)) {
+                    var auxMatrix = CreateAuxMatrix(matrix, combinationList[row][i], row);
                     CheckLines(auxMatrix,combinationList[row][i],columnList[row]);
-                    
-                
-                    if (row == combinationList.Length-1)
-                    {
-                        if (NonogramSolved(auxMatrix, rowList, columnList))
-                        {
-                            Console.WriteLine("---------------------");
-                            Print2DArray(auxMatrix);
-                            Console.WriteLine("---------------------");
+                    if (row == combinationList.Length-1) {
+                        if (NonogramSolved(auxMatrix, rowList, columnList)) {
+                            FinalNonogram = auxMatrix;
                             Solved = true;
                             break;
                         }
                     }
                     Backtracking(row+1,auxMatrix,combinationList,rowList,columnList);            
                 }
-                
                 CleanCombination(matrix,combinationList[row][i],row);
             }
             
@@ -650,22 +538,18 @@ namespace NonogramSolver
             ClueBiggerThanSpace(matrix, rowList, columnList);
             UnreachableCells(matrix,rowList);
 
-
-            var cellsToPaint = TotalCellsToPaint(rowList, columnList); //Sums all the cells that have to be painted
-            var remainingCells = RemainingCells(matrix, cellsToPaint); //Cells that are left
-
             //Things that are going to be used in bactracking method
             //var zeroCells = ZeroCells(matrix); //Contains all the positions that have 0
             //Print2DArray(matrix);
             //List<int>[] backtrackingArray = new List<int>[remainingCells];
-            List<int>[] zeroCells = new List<int>[matrix.GetLength(0)]; // Create an array of list
+            var zeroCells = new List<int>[matrix.GetLength(0)]; // Create an array of list
             InitializeArrayOfList(zeroCells);
             zeroCells = ZeroCells(matrix, zeroCells); //that will contain all the cells with 0
 
-            int[] remainingAmount = new int[matrix.GetLength(0)];
+            var remainingAmount = new int[matrix.GetLength(0)];
             RemainingAmount(matrix, remainingAmount, rowList);
 
-            List<List<int>>[] combinationList = new List<List<int>>[matrix.GetLength(1)];
+            var combinationList = new List<List<int>>[matrix.GetLength(1)];
             InitializeCombinationList(combinationList);
             
             CreateCombinations(zeroCells, remainingAmount, combinationList,matrix);
